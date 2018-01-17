@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.sqlite
+*.mo
+
+.DS_Store
+.idea
+.vscode
+env
+static/*
+media/*
+
+xunittest.xml
+.coverage
+*.orig
