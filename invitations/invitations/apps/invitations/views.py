@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -10,7 +11,8 @@ from .forms import InvitationActivationForm, InvitationSendForm
 from .models import Invitation
 
 
-class SendInvitationView(FormView):
+class SendInvitationView(LoginRequiredMixin, FormView):
+    login_url = '/login/'
     template_name = 'invitations/invitation_send_form.html'
     form_class = InvitationSendForm
     success_url = reverse_lazy('invitation:send_success')
@@ -22,7 +24,8 @@ class SendInvitationView(FormView):
         return super().form_valid(form)
 
 
-class SendInvitationSuccessView(TemplateView):
+class SendInvitationSuccessView(LoginRequiredMixin, TemplateView):
+    login_url = '/login/'
     template_name = 'invitations/invitation_send_success.html'
 
 

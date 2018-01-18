@@ -12,9 +12,13 @@ class SendInvitationViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        user = User.objects.create(username='admin@acme.test', email='admin@acme.test')
+        user.set_password('123')
+        user.save()
         cls.url = reverse('invitation:send')
 
     def test_send_invitation_success(self):
+        self.client.login(username='admin@acme.test', password='123')
         mail.outbox = []
         self.assertFalse(Invitation.objects.exists())
         response = self.client.post(self.url, {'email': 'test@acme.test'}, follow=True)
@@ -33,7 +37,12 @@ class SendInvitationViewTest(TestCase):
         self.assertEqual(mail.outbox[0].to[0], invitation.email)
         self.assertEqual(mail.outbox[0].from_email, settings.DEFAULT_FROM_EMAIL)
 
+    def test_send_anonymous_invitation_failed(self):
+        response = self.client.post(self.url, {'email': 'test@acme.test'}, follow=True)
+        self.assertRedirects(response, '/login/?next=/invitation/send/')
+
     def test_send_exists_invitation_failed(self):
+        self.client.login(username='admin@acme.test', password='123')
         Invitation.objects.create(email='test@acme.test')
         response = self.client.post(self.url, {'email': 'test@acme.test'}, follow=True)
 
@@ -45,6 +54,7 @@ class SendInvitationViewTest(TestCase):
         )
 
     def test_send_activated_invitation_failed(self):
+        self.client.login(username='admin@acme.test', password='123')
         user = User.objects.create(username='test@acme.test', email='test@acme.test')
         Invitation.objects.create(email='test@acme.test', user=user)
         response = self.client.post(self.url, {'email': 'test@acme.test'}, follow=True)
@@ -57,6 +67,7 @@ class SendInvitationViewTest(TestCase):
         )
 
     def test_send_exists_case_sensivity_invitation_failed(self):
+        self.client.login(username='admin@acme.test', password='123')
         Invitation.objects.create(email='test@acme.test')
         response = self.client.post(self.url, {'email': 'TeSt@acme.test'}, follow=True)
 

@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import RedirectView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-
-    url('invitation/',
+    url(r'^$',
+        RedirectView.as_view(url=reverse_lazy('invitation:send'), permanent=False)
+        ),
+    url(r'^login/$', LoginView.as_view(), name='login'),
+    url(r'^logout/$', LogoutView.as_view(next_page='/'), name='logout'),
+    url(r'^invitation/',
         include('invitations.apps.invitations.urls', namespace='invitation')
         ),
 ]

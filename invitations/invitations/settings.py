@@ -54,10 +54,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'invitations.urls'
 
+BASE_TEMPLATE_DIR = BASE_DIR + '/templates/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
