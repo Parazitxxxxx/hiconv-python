@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 *.sqlite
+*.sqlite3
 *.mo
 
 .DS_Store
