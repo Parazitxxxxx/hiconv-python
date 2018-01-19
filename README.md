@@ -1,3 +1,8 @@
+# About
+This is implementation of simple invitations sending mechanism on Django framework.
+Project use a simple auth and django forms for invite new users.
+For run this example you need use the Docker or local env based on Python v3.5
+
 # How to run project
 
 ## Using Docker

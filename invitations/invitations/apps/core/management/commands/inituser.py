@@ -5,6 +5,9 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
+    """
+    This command init user for using it for logging in service
+    """
 
     def handle(self, *args, **options):
         email = 'admin@acme.test'
