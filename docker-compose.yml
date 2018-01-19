@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  web-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python ./invitations/manage.py migrate --noinput && python ./invitations/manage.py inituser && python ./invitations/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    environment:
+      DJANGO_SETTINGS_MODULE: 'invitations.settings.dev'
+    working_dir: /app
+    ports:
+      - "8000:8000"

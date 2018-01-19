@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+37x9-z@2gdnm5p@12j%5cdkz2c&@&7w*am1)q_r-k1rgls52r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'invitations.apps.core',
     'invitations.apps.invitations',
     'invitations.apps.mailing',
 ]
@@ -79,9 +80,13 @@ WSGI_APPLICATION = 'invitations.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT', ''),
+    },
 }
 
 
@@ -126,4 +131,10 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'auth.User'
 DEFAULT_FROM_EMAIL = 'no-reply@acme.acme'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Mailing Settings
+EMAIL_HOST = os.getenv('MAIL_SERVER')
+EMAIL_PORT = int(os.getenv('MAIL_PORT', '465'))
+EMAIL_USE_TLS = bool(os.getenv('MAIL_USE_TLS', True))
+EMAIL_HOST_USER = os.getenv('MAIL_USERNAME')
+EMAIL_HOST_PASSWORD = os.getenv('MAIL_PASSWORD')
+MAIL_ASSET_BUCKET = os.getenv('MAIL_ASSET_BUCKET')
